@@ -19,8 +19,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 3. Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 3. Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.2'
 
       - name: 4. Generate Native Android Project & Download App Icon
         run: |
@@ -29,7 +31,7 @@ jobs:
           mkdir -p android-app/app/src/main/res/drawable
           mkdir -p android-app/app/src/main/assets
 
-          # Salin index.html ke dalam APK sekaligus bisa load online
+          # Salin index.html ke dalam APK
           cp index.html android-app/app/src/main/assets/index.html
 
           # Download logo aplikasi dari URL Anda
@@ -195,7 +197,6 @@ jobs:
                   webView.setWebChromeClient(new WebChromeClient());
                   webView.addJavascriptInterface(new WebAppInterface(), "AndroidNative");
 
-                  // Muat langsung dari aset internal APK (super cepat & selalu sinkron)
                   webView.loadUrl("https://milshasya-dev.github.io/notamhmedia/?v=" + System.currentTimeMillis());
               }
 
@@ -220,12 +221,10 @@ jobs:
                           shareIntent.putExtra(Intent.EXTRA_TEXT, caption);
                           shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                          // Coba langsung arahkan ke WhatsApp jika terinstall
                           shareIntent.setPackage("com.whatsapp");
                           try {
                               startActivity(shareIntent);
                           } catch (Exception e) {
-                              // Jika pakai WA Business atau lainnya, buka daftar pilihan aplikasi
                               shareIntent.setPackage(null);
                               startActivity(Intent.createChooser(shareIntent, "Kirim Nota ke WhatsApp"));
                           }
@@ -280,9 +279,8 @@ jobs:
       - name: 5. Compile APK dengan Gradle
         working-directory: ./android-app
         run: |
-          gradle wrapper --gradle-version 8.2
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          gradle assembleDebug
 
       - name: 6. Upload File APK Siap Download
         uses: actions/upload-artifact@v4
