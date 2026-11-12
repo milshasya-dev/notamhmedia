@@ -3,162 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Invoice MH MEDIA</title>
-  <meta name="theme-color" content="#1e293b">
-  <!-- Font Montserrat -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- jsPDF untuk Export PDF -->
+  <title>MH MEDIA - Smart Invoice</title>
+  <meta name="theme-color" content="#2b1d28">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- jsPDF & QRCode -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
+    :root {
+      --primary: #8b4367;
+      --primary-dark: #2b1d28;
+      --accent: #f43f5e;
+      --wa-green: #10b981;
+      --bg-soft: #f8f5f7;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: #f1f5f9;
-      color: #1e293b;
-      padding-bottom: 90px;
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      padding-bottom: 100px;
     }
 
-    /* Header Sticky */
-    .app-header {
-      background: #1e293b;
-      color: #ffffff;
-      padding: 14px 16px;
+    /* Modern Hero App Header */
+    .hero-header {
+      background: linear-gradient(135deg, #2b1d28 0%, #5c2c45 100%);
+      color: #fff;
+      padding: 20px 18px 28px 18px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+      box-shadow: 0 8px 25px rgba(43, 29, 40, 0.2);
+    }
+
+    .header-top {
+      max-width: 500px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    .app-header h1 {
-      font-size: 16px;
-      font-weight: 700;
+    .brand-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .btn-random {
-      background: #334155;
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: #ebd5de;
+      display: block;
+    }
+
+    .btn-dice {
+      background: rgba(255,255,255,0.15);
       color: #fff;
-      border: 1px solid #475569;
-      padding: 6px 12px;
-      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 14px;
+      border-radius: 50px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      transition: 0.2s;
     }
 
-    .btn-random:active {
-      transform: scale(0.96);
+    .btn-dice:active {
+      transform: scale(0.94);
+      background: rgba(255,255,255,0.28);
     }
 
-    /* Container Utama Mobile-First */
-    .container {
+    /* Ringkasan Total Mengambang */
+    .summary-banner {
+      max-width: 500px;
+      margin: -18px auto 14px auto;
+      padding: 0 14px;
+    }
+
+    .summary-inner {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #f1e4ea;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .summary-value {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Container Utama */
+    .main-wrap {
       max-width: 500px;
       margin: 0 auto;
-      padding: 12px;
+      padding: 0 14px;
     }
 
-    .card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    .glass-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      border: 1px solid #f1f5f9;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
     }
 
     .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-dark);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 6px;
+    }
+
+    .pill-status {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    /* Form Input Modern */
+    .form-group {
+      margin-bottom: 10px;
     }
 
     label {
       display: block;
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: #475569;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     input[type="text"],
     input[type="number"],
     textarea {
       width: 100%;
-      padding: 9px 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
       font-size: 13px;
+      font-weight: 600;
       color: #0f172a;
       background: #f8fafc;
+      transition: 0.2s;
       outline: none;
     }
 
     input:focus, textarea:focus {
-      border-color: #2563eb;
+      border-color: var(--primary);
       background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(139, 67, 103, 0.12);
     }
 
-    .grid-2 {
+    .row-2 {
       display: grid;
       grid-template-columns: 1.3fr 1fr;
       gap: 10px;
-      margin-top: 10px;
     }
 
-    /* Baris Item */
-    .item-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 8px;
+    /* Item List Modern Card */
+    .item-card {
+      background: #fdfbfc;
+      border: 1.5px solid #efe4ea;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+      transition: 0.2s;
     }
 
-    .item-top {
+    .item-header {
       display: flex;
       gap: 8px;
       margin-bottom: 8px;
+      align-items: center;
     }
 
-    .btn-del {
-      background: #fee2e2;
-      color: #dc2626;
-      border: none;
+    .item-badge {
+      background: var(--primary);
+      color: #fff;
+      width: 24px;
+      height: 24px;
       border-radius: 8px;
-      width: 38px;
-      font-weight: 700;
-      font-size: 14px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .btn-remove {
+      background: #ffe4e6;
+      color: #e11d48;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13px;
       cursor: pointer;
       flex-shrink: 0;
     }
 
-    .btn-add {
-      background: #2563eb;
-      color: #ffffff;
+    .btn-add-item {
+      background: linear-gradient(135deg, #8b4367 0%, #632a46 100%);
+      color: #fff;
       border: none;
-      border-radius: 20px;
-      padding: 6px 14px;
+      padding: 7px 14px;
+      border-radius: 50px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      box-shadow: 0 3px 10px rgba(139, 67, 103, 0.25);
     }
 
-    /* Preview Canvas */
-    .canvas-wrapper {
-      background: #cbd5e1;
-      padding: 8px;
-      border-radius: 10px;
+    .btn-add-item:active {
+      transform: scale(0.95);
+    }
+
+    /* Accordion Pengaturan Tambahan */
+    details {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      margin-top: 10px;
+    }
+
+    summary {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    summary::after {
+      content: "▼";
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    details[open] summary::after {
+      content: "▲";
+    }
+
+    /* Preview Canvas Frame */
+    .preview-frame {
+      background: #e2e8f0;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
     }
 
     #nota-canvas {
@@ -166,216 +319,286 @@
       height: auto;
       display: block;
       background: #ffffff;
-      border-radius: 4px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     }
 
-    .status-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: #16a34a;
-    }
-
-    /* Kalibrasi */
-    details {
-      margin-top: 8px;
-      font-size: 12px;
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: #64748b;
-      padding: 4px 0;
-    }
-
-    /* Sticky Bottom Bar */
-    .bottom-nav {
+    /* Bottom Action Bar */
+    .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: #ffffff;
-      padding: 10px 12px;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
-      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 12px 16px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      z-index: 90;
+      border-top: 1px solid #f1f5f9;
     }
 
-    .bottom-nav-inner {
+    .bottom-inner {
       max-width: 500px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.2fr;
       gap: 10px;
     }
 
-    .btn-action {
+    .btn-main {
       border: none;
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 13px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      text-align: center;
-      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #fff;
+      transition: 0.2s;
     }
 
-    .btn-pdf { background: #0f172a; }
-    .btn-wa { background: #16a34a; }
+    .btn-main:active {
+      transform: scale(0.97);
+    }
 
-    /* Modal Pilihan WA */
-    .modal-overlay {
+    .btn-save-pdf {
+      background: #1e293b;
+    }
+
+    .btn-share-wa {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    /* Modal Share WA */
+    .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
       display: none;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
       z-index: 999;
       padding: 16px;
     }
 
-    .modal-box {
+    .modal-sheet {
       background: #ffffff;
       width: 100%;
-      max-width: 340px;
-      border-radius: 14px;
-      padding: 18px;
+      max-width: 440px;
+      border-radius: 22px;
+      padding: 22px 18px;
       text-align: center;
+      animation: slideUp 0.25s ease-out;
     }
 
-    .modal-box h3 {
-      font-size: 16px;
-      margin-bottom: 6px;
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    .modal-box p {
+    .modal-sheet h3 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .modal-sheet p {
       font-size: 12px;
       color: #64748b;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
-    .modal-btn {
+    .btn-sheet {
       width: 100%;
-      padding: 11px;
+      padding: 13px;
       border: none;
-      border-radius: 8px;
-      font-weight: 700;
+      border-radius: 12px;
       font-size: 13px;
-      margin-bottom: 8px;
+      font-weight: 800;
+      margin-bottom: 10px;
       cursor: pointer;
       color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <div class="app-header">
-    <h1>🧾 Nota MH MEDIA</h1>
-    <button type="button" class="btn-random" onclick="acakFaktur()">🎲 Acak Faktur</button>
+  <!-- QR Generator Hidden Container -->
+  <div id="qr-hidden" style="display:none;"></div>
+
+  <!-- HERO HEADER -->
+  <div class="hero-header">
+    <div class="header-top">
+      <div class="brand-badge">
+        <div class="brand-icon">🎬</div>
+        <div class="brand-text">
+          <h1>MH MEDIA</h1>
+          <span>Smart Invoice Studio</span>
+        </div>
+      </div>
+      <button type="button" class="btn-dice" onclick="acakFaktur()">🎲 Acak Faktur</button>
+    </div>
   </div>
 
-  <div class="container">
-    <!-- 1. INFO KLIEN & TANGGAL -->
-    <div class="card">
-      <div class="card-title">
-        <span>1. Tujuan & Tanggal Tagihan</span>
-        <span id="bg-status" class="status-badge">⏳ Memuat Template...</span>
-      </div>
+  <!-- FLOATING TOTAL BANNER -->
+  <div class="summary-banner">
+    <div class="summary-inner">
       <div>
-        <label>Tagihan Untuk (Klien & Alamat)</label>
-        <textarea id="in-klien" rows="2" oninput="renderCanvas()">Metode Al Miftah Sidogiri
+        <div class="summary-label">Total Tagihan Aktif</div>
+        <div class="summary-value" id="banner-total">Rp 3.800.000</div>
+      </div>
+      <span id="status-template" class="pill-status">⏳ Memuat...</span>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+    <!-- 1. INFORMASI KLIEN & FAKTUR -->
+    <div class="glass-card">
+      <div class="card-head">
+        <div class="card-title">👤 Tujuan & Tanggal Tagihan</div>
+      </div>
+
+      <div class="form-group">
+        <label>Tagihan Untuk (Nama Klien & Alamat)</label>
+        <textarea id="in-klien" rows="2" oninput="renderNota()">Metode Al Miftah Sidogiri
 Sidogiri, Kraton Pasuruan</textarea>
       </div>
-      <div class="grid-2">
+
+      <div class="row-2">
         <div>
           <label>Tanggal Nota</label>
-          <input type="text" id="in-tanggal" value="22 Oktober 2026" oninput="renderCanvas()">
+          <input type="text" id="in-tanggal" value="22 Oktober 2026" oninput="renderNota()">
         </div>
         <div>
-          <label>No. Faktur</label>
-          <input type="text" id="in-faktur" value="1311" oninput="renderCanvas()">
+          <label>Nomor Faktur</label>
+          <input type="text" id="in-faktur" value="1311" oninput="renderNota()">
         </div>
       </div>
     </div>
 
-    <!-- 2. DAFTAR ITEM & HARGA -->
-    <div class="card">
-      <div class="card-title">
-        <span>2. Rincian Keterangan & Harga</span>
-        <button type="button" class="btn-add" onclick="tambahBaris()">+ Tambah Baris</button>
+    <!-- 2. DAFTAR ITEM LAYANAN -->
+    <div class="glass-card">
+      <div class="card-head">
+        <div class="card-title">📋 Rincian Layanan</div>
+        <button type="button" class="btn-add-item" onclick="tambahBaris()">+ Tambah Baris</button>
       </div>
-      
-      <div id="items-container"></div>
 
-      <!-- Kalibrasi Posisi jika diperlukan -->
+      <div id="items-list"></div>
+
+      <!-- Pengaturan Rekening, QRIS & Kalibrasi -->
       <details>
-        <summary>⚙️ Kalibrasi Posisi Teks & Ganti Background Manual</summary>
-        <div class="grid-2" style="margin-top:8px;">
-          <div>
-            <label>Posisi Y No Faktur</label>
-            <input type="number" id="pos-faktur" value="138" oninput="renderCanvas()">
+        <summary>⚙️ Pengaturan Rekening, TTD & Kalibrasi</summary>
+        <div style="margin-top: 12px;">
+          <div class="row-2" style="margin-bottom:8px;">
+            <div>
+              <label>Nama Bank</label>
+              <input type="text" id="in-bank" value="Transfer Pembayaran Ke BCA" oninput="renderNota()">
+            </div>
+            <div>
+              <label>No. Rekening</label>
+              <input type="text" id="in-norek" value="0891462009" oninput="renderNota()">
+            </div>
           </div>
-          <div>
-            <label>Posisi Y Tanggal</label>
-            <input type="number" id="pos-tanggal" value="230" oninput="renderCanvas()">
+          <div class="row-2" style="margin-bottom:8px;">
+            <div>
+              <label>Atas Nama Rekening</label>
+              <input type="text" id="in-an" value="Moch Sirojul Millah" oninput="renderNota()">
+            </div>
+            <div>
+              <label>Nama Penandatangan</label>
+              <input type="text" id="in-ttd-nama" value="Mils Hasya" oninput="renderNota()">
+            </div>
           </div>
-          <div>
-            <label>Posisi Y Klien</label>
-            <input type="number" id="pos-klien" value="268" oninput="renderCanvas()">
+          <div class="row-2" style="margin-bottom:8px;">
+            <div>
+              <label>Upload Gambar QRIS Asli (Opsional)</label>
+              <input type="file" id="up-qris" accept="image/*" style="font-size:11px;">
+            </div>
+            <div>
+              <label>Upload TTD PNG (Opsional)</label>
+              <input type="file" id="up-ttd" accept="image/*" style="font-size:11px;">
+            </div>
           </div>
-          <div>
-            <label>Posisi Y Tabel</label>
-            <input type="number" id="pos-tabel" value="452" oninput="renderCanvas()">
+          <div class="row-2">
+            <div>
+              <label>Geser Y Awal Tabel (px)</label>
+              <input type="number" id="pos-y-tabel" value="445" oninput="renderNota()">
+            </div>
+            <div>
+              <label>Jarak Antar Baris (px)</label>
+              <input type="number" id="pos-gap-baris" value="48" oninput="renderNota()">
+            </div>
           </div>
-        </div>
-        <div style="margin-top:10px;">
-          <label>Ganti File Background dari Galeri HP (Opsional)</label>
-          <input type="file" id="file-bg" accept="image/*" style="font-size:12px;">
         </div>
       </details>
     </div>
 
     <!-- 3. LIVE PREVIEW CANVAS -->
-    <div class="card">
-      <div class="card-title">
-        <span>3. Hasil Preview Nota</span>
+    <div class="glass-card">
+      <div class="card-head">
+        <div class="card-title">👁️ Live Preview Nota</div>
+        <small style="font-size:11px; color:#64748b; font-weight:600;">Otomatis Menyesuaikan Baris</small>
       </div>
-      <div class="canvas-wrapper">
+      <div class="preview-frame">
         <canvas id="nota-canvas" width="794" height="1123"></canvas>
       </div>
     </div>
   </div>
 
-  <!-- TOMBOL BAWAH -->
-  <div class="bottom-nav">
-    <div class="bottom-nav-inner">
-      <button type="button" class="btn-action btn-pdf" onclick="downloadPDF()">📥 Simpan PDF</button>
-      <button type="button" class="btn-action btn-wa" onclick="bukaModalWA()">📲 Share WA</button>
+  <!-- STICKY BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="bottom-inner">
+      <button type="button" class="btn-main btn-save-pdf" onclick="unduhPDF()">
+        📥 Download PDF
+      </button>
+      <button type="button" class="btn-main btn-share-wa" onclick="siapkanDanBukaModalWA()">
+        📲 Share WA
+      </button>
     </div>
   </div>
 
-  <!-- MODAL PILIHAN SHARE WHATSAPP -->
-  <div class="modal-overlay" id="modal-wa">
-    <div class="modal-box">
-      <h3>Share ke WhatsApp</h3>
-      <p>Pilih format nota yang ingin dikirim ke kontak WA:</p>
-      <button type="button" class="modal-btn" style="background:#16a34a;" onclick="prosesShareWA('pdf')">📄 Kirim File PDF</button>
-      <button type="button" class="modal-btn" style="background:#2563eb;" onclick="prosesShareWA('jpg')">🖼️ Kirim Gambar (JPG)</button>
-      <button type="button" class="modal-btn" style="background:#64748b; margin-bottom:0;" onclick="tutupModalWA()">Batal</button>
+  <!-- MODAL SHARE WA (PRE-GENERATED AGAR LANGSUNG BUKA APLIKASI WA) -->
+  <div class="modal-backdrop" id="modal-wa" onclick="if(event.target===this) tutupModalWA()">
+    <div class="modal-sheet">
+      <h3>Kirim Nota ke WhatsApp</h3>
+      <p id="status-siap-share">Pilih format file yang akan langsung dilampirkan ke kontak WhatsApp:</p>
+      
+      <button type="button" class="btn-sheet" style="background:#10b981;" onclick="kirimLangsungWA('pdf')">
+        📄 Kirim Dokumen PDF
+      </button>
+      <button type="button" class="btn-sheet" style="background:#3b82f6;" onclick="kirimLangsungWA('jpg')">
+        🖼️ Kirim Gambar (JPG)
+      </button>
+      <button type="button" class="btn-sheet" style="background:#f1f5f9; color:#334155; margin-bottom:0;" onclick="tutupModalWA()">
+        Batal
+      </button>
     </div>
   </div>
 
 <script>
-  // URL Gambar Template dari Anda
-  const TEMPLATE_IMAGE_URL = "https://iili.io/npsADRR.jpg";
+  // URL Canvas Background Baru dari Anda
+  const BG_URL = "https://iili.io/npsZkrv.jpg";
 
   const canvas = document.getElementById('nota-canvas');
   const ctx = canvas.getContext('2d');
-  let bgImage = null;
 
-  // Data Default Sesuai Gambar Nota MH MEDIA
+  let bgImg = null;
+  let qrisImg = null;
+  let customTtdImg = null;
+
+  // Variabel Pre-Generated File agar navigator.share TIDAK DIBLOKIR browser HP
+  let siapFilePDF = null;
+  let siapFileJPG = null;
+
   let items = [
     { ket: "Record + Arransemen", harga: 200000, qty: 19 },
     { ket: "Editing", harga: 0, qty: 0 },
@@ -384,229 +607,364 @@ Sidogiri, Kraton Pasuruan</textarea>
     { ket: "Revisi", harga: 0, qty: 0 }
   ];
 
-  function formatRp(num) {
-    return "Rp " + (Number(num) || 0).toLocaleString('id-ID');
+  function formatRp(n) {
+    return "Rp " + (Number(n) || 0).toLocaleString('id-ID');
   }
 
   function acakFaktur() {
     document.getElementById('in-faktur').value = Math.floor(1000 + Math.random() * 9000);
-    renderCanvas();
+    renderNota();
   }
 
-  // Muat Gambar dari URL https://iili.io/npsADRR.jpg
-  function muatTemplateUtama() {
-    const img = new Image();
-    img.crossOrigin = "anonymous"; // Wajib agar bisa di-export ke PDF/JPG
-    img.onload = function() {
-      bgImage = img;
-      document.getElementById('bg-status').innerText = "✅ Template Aktif";
-      renderCanvas();
-    };
-    img.onerror = function() {
-      // Jika server gambar memblokir CORS, muat ulang atau gunakan file lokal
-      document.getElementById('bg-status').innerText = "⚠️ Gunakan file lokal jika gagal export";
-      renderCanvas();
-    };
-    img.src = TEMPLATE_IMAGE_URL;
+  // 1. Buat QRIS Default Otomatis
+  function initQRISDefault() {
+    const wadahQR = document.getElementById('qr-hidden');
+    new QRCode(wadahQR, {
+      text: "00020101021126610014COM.GO-JEK.WWW01189360091432657946470215ID10265794647630303UMI5204599953033605802ID5917MH MEDIA - STUDIO6008PASURUAN6304",
+      width: 170,
+      height: 170
+    });
+    setTimeout(() => {
+      const qrCanvas = wadahQR.querySelector('canvas');
+      if (qrCanvas) {
+        const img = new Image();
+        img.onload = () => { if (!qrisImg) { qrisImg = img; renderNota(); } };
+        img.src = qrCanvas.toDataURL();
+      }
+    }, 250);
   }
 
-  // Opsi Ganti Gambar Manual dari Galeri jika suatu saat butuh
-  document.getElementById('file-bg').addEventListener('change', function(e) {
+  // Upload QRIS & TTD Custom (Tersimpan di LocalStorage)
+  document.getElementById('up-qris').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    const img = new Image();
-    img.onload = function() {
-      bgImage = img;
-      document.getElementById('bg-status').innerText = "✅ Template Galeri Aktif";
-      renderCanvas();
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const img = new Image();
+      img.onload = () => { qrisImg = img; renderNota(); };
+      img.src = ev.target.result;
+      try { localStorage.setItem('mh_custom_qris', ev.target.result); } catch(err){}
     };
-    img.src = URL.createObjectURL(file);
+    reader.readAsDataURL(file);
   });
 
-  // Render Form Input Item Secara Responsif
-  function renderFormItems() {
-    const container = document.getElementById('items-container');
-    container.innerHTML = '';
+  document.getElementById('up-ttd').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const img = new Image();
+      img.onload = () => { customTtdImg = img; renderNota(); };
+      img.src = ev.target.result;
+      try { localStorage.setItem('mh_custom_ttd', ev.target.result); } catch(err){}
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // 2. Muat Background https://iili.io/npsZkrv.jpg
+  function muatBackground() {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      bgImg = img;
+      document.getElementById('status-template').innerText = "✅ Template Siap";
+      renderNota();
+    };
+    img.onerror = function() {
+      document.getElementById('status-template').innerText = "⚠️ Mode Offline";
+      renderNota();
+    };
+    img.src = BG_URL;
+  }
+
+  // 3. Render Form Daftar Item
+  function renderEditorItems() {
+    const list = document.getElementById('items-list');
+    list.innerHTML = '';
 
     items.forEach((item, idx) => {
-      const box = document.createElement('div');
-      box.className = 'item-box';
+      const card = document.createElement('div');
+      card.className = 'item-card';
 
-      // Baris Atas: Keterangan + Hapus
-      const topDiv = document.createElement('div');
-      topDiv.className = 'item-top';
+      const head = document.createElement('div');
+      head.className = 'item-header';
+
+      const badge = document.createElement('div');
+      badge.className = 'item-badge';
+      badge.innerText = idx + 1;
 
       const inKet = document.createElement('input');
       inKet.type = 'text';
       inKet.value = item.ket;
-      inKet.placeholder = 'Nama Keterangan';
+      inKet.placeholder = 'Nama Layanan / Keterangan';
       inKet.oninput = function() {
         items[idx].ket = this.value;
-        renderCanvas();
+        renderNota();
       };
 
       const btnDel = document.createElement('button');
       btnDel.type = 'button';
-      btnDel.className = 'btn-del';
+      btnDel.className = 'btn-remove';
       btnDel.innerText = '✕';
       btnDel.onclick = function() {
         items.splice(idx, 1);
-        renderFormItems();
-        renderCanvas();
+        renderEditorItems();
+        renderNota();
       };
 
-      topDiv.appendChild(inKet);
-      topDiv.appendChild(btnDel);
+      head.appendChild(badge);
+      head.appendChild(inKet);
+      head.appendChild(btnDel);
 
-      // Baris Bawah: Harga & Qty
-      const btmDiv = document.createElement('div');
-      btmDiv.className = 'grid-2';
-      btmDiv.style.marginTop = '0';
+      const row2 = document.createElement('div');
+      row2.className = 'row-2';
 
-      const wrapHarga = document.createElement('div');
-      const lblHarga = document.createElement('label');
-      lblHarga.innerText = 'Harga (Rp)';
-      const inHarga = document.createElement('input');
-      inHarga.type = 'number';
-      inHarga.value = item.harga;
-      inHarga.oninput = function() {
+      const colH = document.createElement('div');
+      const lblH = document.createElement('label');
+      lblH.innerText = 'Harga Satuan (Rp)';
+      const inH = document.createElement('input');
+      inH.type = 'number';
+      inH.value = item.harga;
+      inH.oninput = function() {
         items[idx].harga = Number(this.value) || 0;
-        renderCanvas();
+        renderNota();
       };
-      wrapHarga.appendChild(lblHarga);
-      wrapHarga.appendChild(inHarga);
+      colH.appendChild(lblH);
+      colH.appendChild(inH);
 
-      const wrapQty = document.createElement('div');
-      const lblQty = document.createElement('label');
-      lblQty.innerText = 'Jumlah (0 = -)';
-      const inQty = document.createElement('input');
-      inQty.type = 'number';
-      inQty.value = item.qty;
-      inQty.oninput = function() {
+      const colQ = document.createElement('div');
+      const lblQ = document.createElement('label');
+      lblQ.innerText = 'Jumlah (Isi 0 jika -)';
+      const inQ = document.createElement('input');
+      inQ.type = 'number';
+      inQ.value = item.qty;
+      inQ.oninput = function() {
         items[idx].qty = Number(this.value) || 0;
-        renderCanvas();
+        renderNota();
       };
-      wrapQty.appendChild(lblQty);
-      wrapQty.appendChild(inQty);
+      colQ.appendChild(lblQ);
+      colQ.appendChild(inQ);
 
-      btmDiv.appendChild(wrapHarga);
-      btmDiv.appendChild(wrapQty);
+      row2.appendChild(colH);
+      row2.appendChild(colQ);
 
-      box.appendChild(topDiv);
-      box.appendChild(btmDiv);
-      container.appendChild(box);
+      card.appendChild(head);
+      card.appendChild(row2);
+      list.appendChild(card);
     });
   }
 
   function tambahBaris() {
-    items.push({ ket: "Item Baru", harga: 0, qty: 0 });
-    renderFormItems();
-    renderCanvas();
+    items.push({ ket: "Layanan Tambahan", harga: 0, qty: 0 });
+    renderEditorItems();
+    renderNota();
   }
 
-  // Gambar Background + Teks ke Canvas
-  function renderCanvas() {
+  // 4. RENDER NOTA DINAMIS (ANTI NABRAK MESKIPUN BARIS BANYAK)
+  function renderNota() {
+    const yAwalTabel = Number(document.getElementById('pos-y-tabel').value) || 445;
+    const tinggiBaris = Number(document.getElementById('pos-gap-baris').value) || 48;
+
+    // Hitung apakah tinggi kanvas perlu diperpanjang jika item > 5 baris
+    const estimasiTinggi = yAwalTabel + (items.length * tinggiBaris) + 390;
+    canvas.height = Math.max(1123, estimasiTinggi);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (bgImage) {
-      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+    // Gambar Background Template
+    if (bgImg) {
+      ctx.drawImage(bgImg, 0, 0, 794, 1123);
     }
 
     ctx.fillStyle = "#222222";
     ctx.textBaseline = "alphabetic";
 
-    const yFaktur = Number(document.getElementById('pos-faktur').value) || 138;
-    const yTanggal = Number(document.getElementById('pos-tanggal').value) || 230;
-    const yKlien = Number(document.getElementById('pos-klien').value) || 268;
-    let yTabel = Number(document.getElementById('pos-tabel').value) || 452;
-
-    // 1. No Faktur
+    // 1. Nomor Faktur
     const noFaktur = document.getElementById('in-faktur').value;
     ctx.font = "500 17px 'Montserrat', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("#" + noFaktur, 650, yFaktur);
+    ctx.fillText("#" + noFaktur, 650, 138);
 
-    // 2. Tanggal
+    // 2. Tanggal (Otomatis menambahkan label Tanggal : jika di template bersih)
     const tanggal = document.getElementById('in-tanggal').value;
-    ctx.font = "400 16px 'Montserrat', sans-serif";
     ctx.textAlign = "right";
-    ctx.fillText(tanggal, 712, yTanggal);
+    ctx.font = "400 16px 'Montserrat', sans-serif";
+    ctx.fillText(tanggal, 712, 215);
 
-    // 3. Klien
+    // 3. Tagihan Untuk (Klien)
     const klienLines = document.getElementById('in-klien').value.split('\n');
     ctx.font = "400 17px 'Montserrat', sans-serif";
     ctx.textAlign = "left";
-    klienLines.forEach((line, i) => {
-      ctx.fillText(line, 83, yKlien + (i * 24));
+    klienLines.forEach((line, idx) => {
+      ctx.fillText(line, 83, 255 + (idx * 24));
     });
 
     // 4. Baris Tabel
+    let yCursor = yAwalTabel;
     let grandTotal = 0;
-    const rowHeight = 52;
 
     items.forEach(item => {
       const isZero = item.qty <= 0 || item.harga <= 0;
-      const subTotal = isZero ? 0 : (item.harga * item.qty);
-      grandTotal += subTotal;
+      const sub = isZero ? 0 : (item.harga * item.qty);
+      grandTotal += sub;
 
       ctx.font = "400 16px 'Montserrat', sans-serif";
       ctx.fillStyle = "#222222";
 
       ctx.textAlign = "left";
-      ctx.fillText(item.ket, 80, yTabel);
+      ctx.fillText(item.ket, 80, yCursor);
 
       ctx.textAlign = "center";
-      ctx.fillText(formatRp(item.harga), 435, yTabel);
-      ctx.fillText(item.qty > 0 ? String(item.qty) : "-", 545, yTabel);
+      ctx.fillText(formatRp(item.harga), 435, yCursor);
+      ctx.fillText(item.qty > 0 ? String(item.qty) : "-", 545, yCursor);
 
       ctx.textAlign = "right";
-      ctx.fillText(formatRp(subTotal), 714, yTabel);
+      ctx.fillText(formatRp(sub), 714, yCursor);
 
-      // Garis pembatas baris
+      // Garis Bawah Tiap Baris
       ctx.beginPath();
-      ctx.strokeStyle = "#555555";
+      ctx.strokeStyle = "#666666";
       ctx.lineWidth = 1;
-      ctx.moveTo(80, yTabel + 18);
-      ctx.lineTo(714, yTabel + 18);
+      ctx.moveTo(80, yCursor + 16);
+      ctx.lineTo(714, yCursor + 16);
       ctx.stroke();
 
-      yTabel += rowHeight;
+      yCursor += tinggiBaris;
     });
 
-    // 5. Grand Total
-    const yGrand = yTabel + 12;
+    // Update Banner Total di Atas Aplikasi
+    document.getElementById('banner-total').innerText = formatRp(grandTotal);
+
+    // 5. GRAND TOTAL (Otomatis di bawah baris terakhir)
+    const yTotal = yCursor + 14;
     ctx.font = "700 20px 'Montserrat', sans-serif";
     ctx.textAlign = "left";
-    ctx.fillText("TOTAL", 390, yGrand);
+    ctx.fillText("TOTAL", 390, yTotal);
 
     ctx.textAlign = "right";
-    ctx.fillText(formatRp(grandTotal), 714, yGrand);
+    ctx.fillText(formatRp(grandTotal), 714, yTotal);
+
+    // 6. FOOTER DINAMIS (QRIS, Rekening BCA, & Tanda Tangan otomatis turun mengikuti tabel)
+    const yFooter = yTotal + 42;
+
+    // A. Blok QRIS di Kiri
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#111111";
+    ctx.font = "700 13px 'Montserrat', sans-serif";
+    ctx.fillText("MH MEDIA - STUDIO", 190, yFooter);
+
+    ctx.font = "400 11px 'Montserrat', sans-serif";
+    ctx.fillText("NMID : ID1026579464763", 190, yFooter + 16);
+    ctx.fillText("A01", 190, yFooter + 31);
+
+    if (qrisImg) {
+      ctx.drawImage(qrisImg, 105, yFooter + 40, 170, 170);
+    }
+
+    // Logo Teks QRIS Standar di bawah barcode
+    ctx.font = "800 16px 'Montserrat', sans-serif";
+    ctx.fillText("QRIS", 145, yFooter + 230);
+    ctx.font = "600 8px 'Montserrat', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("QR Code Standar", 175, yFooter + 221);
+    ctx.fillText("Pembayaran Nasional", 175, yFooter + 231);
+
+    // B. Kotak Rekening BCA di Kanan Atas Footer
+    const boxX = 390;
+    const boxY = yFooter + 8;
+    const boxW = 324;
+    const boxH = 96;
+
+    ctx.strokeStyle = "#777777";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    ctx.fillStyle = "#222222";
+    ctx.textAlign = "left";
+    ctx.font = "700 16px 'Montserrat', sans-serif";
+    ctx.fillText(document.getElementById('in-bank').value, boxX + 16, boxY + 28);
+
+    ctx.font = "400 15px 'Montserrat', sans-serif";
+    ctx.fillText("Atas Nama", boxX + 16, boxY + 55);
+    ctx.fillText(":  " + document.getElementById('in-an').value, boxX + 115, boxY + 55);
+
+    ctx.fillText("No Rekening", boxX + 16, boxY + 79);
+    ctx.fillText(":  " + document.getElementById('in-norek').value, boxX + 115, boxY + 79);
+
+    // C. Blok Tanda Tangan di Kanan Bawah Footer
+    const signCenterX = 615;
+    const signTopY = boxY + 145;
+
+    ctx.textAlign = "center";
+    ctx.font = "400 15px 'Montserrat', sans-serif";
+    ctx.fillText("Dengan Hormat,", signCenterX, signTopY);
+
+    if (customTtdImg) {
+      ctx.drawImage(customTtdImg, signCenterX - 75, signTopY + 8, 150, 65);
+    } else {
+      // Gambar Tanda Tangan Default Mils Hasya
+      ctx.save();
+      ctx.translate(signCenterX - 85, signTopY + 5);
+      ctx.beginPath();
+      ctx.strokeStyle = "#111111";
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.moveTo(15, 25);
+      ctx.bezierCurveTo(60, 15, 110, 25, 115, 35);
+      ctx.bezierCurveTo(120, 45, 45, 75, 35, 60);
+      ctx.bezierCurveTo(25, 45, 95, 25, 130, 20);
+      ctx.bezierCurveTo(140, 18, 135, 45, 145, 30);
+      ctx.bezierCurveTo(155, 15, 175, 28, 165, 35);
+      ctx.bezierCurveTo(155, 42, 105, 52, 85, 55);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    ctx.font = "700 16.5px 'Montserrat', sans-serif";
+    ctx.fillText(document.getElementById('in-ttd-nama').value, signCenterX, signTopY + 88);
   }
 
-  // Buat Objek PDF
-  function generatePDFObject() {
+  // 5. EXPORT PDF & PRE-GENERATE SHARE WA (SUPAYA LANGSUNG BUKA WA TANPA DOWNLOAD)
+  function buatPDFInstance() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'px',
-      format: [794, 1123]
+      format: [canvas.width, canvas.height]
     });
     const imgData = canvas.toDataURL('image/jpeg', 0.95);
-    pdf.addImage(imgData, 'JPEG', 0, 0, 794, 1123);
+    pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
     return pdf;
   }
 
-  function downloadPDF() {
-    renderCanvas();
+  function unduhPDF() {
+    renderNota();
     const noFaktur = document.getElementById('in-faktur').value;
-    const pdf = generatePDFObject();
-    pdf.save(`Invoice_MH_MEDIA_${noFaktur}.pdf`);
+    buatPDFInstance().save(`Invoice_MH_MEDIA_${noFaktur}.pdf`);
   }
 
-  // Modal Share WA
-  function bukaModalWA() {
+  // Siapkan File PDF & JPG SEBELUM Modal Diklik (Menjaga User Gesture Android)
+  function siapkanDanBukaModalWA() {
+    renderNota();
+    const noFaktur = document.getElementById('in-faktur').value;
+
+    // 1. Siapkan File PDF di Memori
+    const pdfBlob = buatPDFInstance().output('blob');
+    siapFilePDF = new File([pdfBlob], `Invoice_MH_MEDIA_${noFaktur}.pdf`, { type: 'application/pdf' });
+
+    // 2. Siapkan File JPG secara Sinkron dari DataURL
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+    const byteString = atob(dataUrl.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const jpgBlob = new Blob([ab], { type: 'image/jpeg' });
+    siapFileJPG = new File([jpgBlob], `Invoice_MH_MEDIA_${noFaktur}.jpg`, { type: 'image/jpeg' });
+
     document.getElementById('modal-wa').style.display = 'flex';
   }
 
@@ -614,65 +972,55 @@ Sidogiri, Kraton Pasuruan</textarea>
     document.getElementById('modal-wa').style.display = 'none';
   }
 
-  function buatCaptionWA() {
+  function buatTeksCaptionWA() {
     const noFaktur = document.getElementById('in-faktur').value;
     const klien = document.getElementById('in-klien').value.split('\n')[0];
     const tanggal = document.getElementById('in-tanggal').value;
-    let total = 0;
-    items.forEach(i => { if (i.qty > 0 && i.harga > 0) total += (i.qty * i.harga); });
+    const total = document.getElementById('banner-total').innerText;
 
-    return `Halo *${klien}*,\nBerikut kami lampirkan Invoice *MH MEDIA*:\n\n📄 *No. Faktur:* #${noFaktur}\n📅 *Tanggal:* ${tanggal}\n💰 *Total Tagihan:* ${formatRp(total)}\n\nTerima kasih! 🙏`;
+    return `Halo *${klien}*,\nBerikut kami lampirkan Invoice *MH MEDIA*:\n\n📄 *No. Faktur:* #${noFaktur}\n📅 *Tanggal:* ${tanggal}\n💰 *Total Tagihan:* ${total}\n\nTerima kasih! 🙏`;
   }
 
-  async function prosesShareWA(format) {
+  // Dipanggil langsung saat tombol di modal ditekan (0 milidetik delay = Langsung buka Share Sheet WA)
+  function kirimLangsungWA(format) {
     tutupModalWA();
-    renderCanvas();
-    const noFaktur = document.getElementById('in-faktur').value;
-    const teksWA = buatCaptionWA();
+    const filePilihan = format === 'pdf' ? siapFilePDF : siapFileJPG;
+    const caption = buatTeksCaptionWA();
 
-    try {
-      let fileShare, fileName;
-
-      if (format === 'pdf') {
-        fileName = `Invoice_MH_MEDIA_${noFaktur}.pdf`;
-        const pdfBlob = generatePDFObject().output('blob');
-        fileShare = new File([pdfBlob], fileName, { type: 'application/pdf' });
-      } else {
-        fileName = `Invoice_MH_MEDIA_${noFaktur}.jpg`;
-        const imgBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
-        fileShare = new File([imgBlob], fileName, { type: 'image/jpeg' });
-      }
-
-      // Buka menu Share Android -> Pilih WhatsApp -> Pilih Kontak
-      if (navigator.canShare && navigator.canShare({ files: [fileShare] })) {
-        await navigator.share({
-          files: [fileShare],
-          title: `Invoice #${noFaktur}`,
-          text: teksWA
-        });
-      } else {
-        // Fallback jika WebView belum support navigator.share: Download + Buka WA
-        const url = URL.createObjectURL(fileShare);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        window.location.href = `whatsapp://send?text=${encodeURIComponent(teksWA)}`;
-      }
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        window.location.href = `whatsapp://send?text=${encodeURIComponent(teksWA)}`;
-      }
+    // Jika dibuka di Chrome Android (HTTPS GitHub Pages), langsung muncul menu pilih aplikasi WhatsApp
+    if (navigator.canShare && navigator.canShare({ files: [filePilihan] })) {
+      navigator.share({
+        files: [filePilihan],
+        title: filePilihan.name,
+        text: caption
+      }).catch(err => {
+        console.log("Share dibatalkan:", err);
+      });
+    } else {
+      // Jika dibuka di APK WebView standar yang tidak mendukung Share File, langsung buka aplikasi WA
+      window.location.href = `whatsapp://send?text=${encodeURIComponent(caption)}`;
     }
   }
 
-  // Inisialisasi Awal
-  renderFormItems();
-  muatTemplateUtama();
+  // Inisialisasi Saat Aplikasi Dibuka
+  renderEditorItems();
+  initQRISDefault();
+
+  // Cek apakah ada QRIS / TTD tersimpan
+  const savedQris = localStorage.getItem('mh_custom_qris');
+  if (savedQris) {
+    const imgQ = new Image();
+    imgQ.onload = () => { qrisImg = imgQ; renderNota(); };
+    imgQ.src = savedQris;
+  }
+  const savedTtd = localStorage.getItem('mh_custom_ttd');
+  if (savedTtd) {
+    const imgT = new Image();
+    imgT.onload = () => { customTtdImg = imgT; renderNota(); };
+    imgT.src = savedTtd;
+  }
+
+  muatBackground();
 </script>
 
 </body>
