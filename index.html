@@ -781,7 +781,16 @@ Alamat Pelanggan</textarea>
   function unduhPDF() {
     renderNota();
     const noFaktur = document.getElementById('in-faktur').value;
-    buatPDFInstance().save(`Invoice_MH_MEDIA_${noFaktur}.pdf`);
+    const namaFile = `Invoice_MH_MEDIA_${noFaktur}.pdf`;
+
+    // Jika dibuka di dalam APK Native, simpan langsung ke folder Download HP
+    if (window.AndroidNative) {
+      const pdfDataUri = buatPDFInstance().output('datauristring');
+      window.AndroidNative.saveFile(pdfDataUri, namaFile, "application/pdf");
+      return;
+    }
+
+    buatPDFInstance().save(namaFile);
   }
 
   function siapkanDanBukaModalWA() {
@@ -819,19 +828,27 @@ Alamat Pelanggan</textarea>
 
   function kirimLangsungWA(format) {
     tutupModalWA();
-    const filePilihan = format === 'pdf' ? siapFilePDF : siapFileJPG;
+    renderNota();
+    const noFaktur = document.getElementById('in-faktur').value;
     const caption = buatTeksCaptionWA();
 
-    // Di HP Android (Chrome), langsung membuka Share Sheet untuk memilih aplikasi WhatsApp
+    // Jika dibuka di dalam APK Native, langsung lempar file PDF/JPG ke aplikasi WhatsApp!
+    if (window.AndroidNative) {
+      if (format === 'pdf') {
+        const pdfDataUri = buatPDFInstance().output('datauristring');
+        window.AndroidNative.shareFile(pdfDataUri, `Invoice_MH_MEDIA_${noFaktur}.pdf`, "application/pdf", caption);
+      } else {
+        const jpgDataUri = canvas.toDataURL('image/jpeg', 0.96);
+        window.AndroidNative.shareFile(jpgDataUri, `Invoice_MH_MEDIA_${noFaktur}.jpg`, "image/jpeg", caption);
+      }
+      return;
+    }
+
+    // Fallback jika dibuka di browser biasa
+    const filePilihan = format === 'pdf' ? siapFilePDF : siapFileJPG;
     if (navigator.canShare && navigator.canShare({ files: [filePilihan] })) {
-      navigator.share({
-        files: [filePilihan],
-        title: filePilihan.name,
-        text: caption
-      }).catch(err => console.log("Batal share:", err));
+      navigator.share({ files: [filePilihan], title: filePilihan.name, text: caption }).catch(() => {});
     } else {
-      // Di Laptop/MacBook (Firefox desktop tidak mendukung share file langsung ke aplikasi WA),
-      // otomatis membuka aplikasi WhatsApp Desktop/Web dengan teks tagihan
       window.location.href = `whatsapp://send?text=${encodeURIComponent(caption)}`;
     }
   }
