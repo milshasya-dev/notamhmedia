@@ -1,0 +1,17 @@
+{
+  "name": "Nota MH MEDIA",
+  "short_name": "MH MEDIA",
+  "start_url": "/notamhmedia/index.html",
+  "display": "standalone",
+  "background_color": "#2b1d28",
+  "theme_color": "#2b1d28",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135679.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
