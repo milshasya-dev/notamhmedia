@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.milshasya_dev.twa",
+        "sha256_cert_fingerprints": ["91:42:43:17:32:C9:DF:51:2B:E1:2F:B4:12:29:A1:B1:EA:8D:07:14:8C:3C:38:9C:69:C8:77:7A:A8:7A:C2:FA"]
+      }
+    }]
