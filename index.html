@@ -7,16 +7,13 @@
   <meta name="theme-color" content="#2b1d28">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <!-- jsPDF & QRCode -->
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
     :root {
       --primary: #8b4367;
       --primary-dark: #2b1d28;
-      --accent: #f43f5e;
-      --wa-green: #10b981;
       --bg-soft: #f8f5f7;
       --card-bg: #ffffff;
       --text-main: #1e293b;
@@ -37,7 +34,7 @@
       padding-bottom: 100px;
     }
 
-    /* Modern Hero App Header */
+    /* Hero Header */
     .hero-header {
       background: linear-gradient(135deg, #2b1d28 0%, #5c2c45 100%);
       color: #fff;
@@ -48,7 +45,7 @@
     }
 
     .header-top {
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -66,7 +63,6 @@
       height: 40px;
       border-radius: 12px;
       background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,17 +90,15 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
     }
 
     .btn-dice:active {
-      transform: scale(0.94);
-      background: rgba(255,255,255,0.28);
+      transform: scale(0.95);
     }
 
-    /* Ringkasan Total Mengambang */
+    /* Banner Total */
     .summary-banner {
-      max-width: 500px;
+      max-width: 520px;
       margin: -18px auto 14px auto;
       padding: 0 14px;
     }
@@ -125,7 +119,6 @@
       font-weight: 700;
       text-transform: uppercase;
       color: var(--text-muted);
-      letter-spacing: 0.5px;
     }
 
     .summary-value {
@@ -134,9 +127,18 @@
       color: var(--primary);
     }
 
+    .pill-status {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+
     /* Container Utama */
     .main-wrap {
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto;
       padding: 0 14px;
     }
@@ -161,21 +163,8 @@
       font-size: 14px;
       font-weight: 800;
       color: var(--primary-dark);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .pill-status {
-      font-size: 10px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: #dcfce7;
-      color: #15803d;
-    }
-
-    /* Form Input Modern */
     .form-group {
       margin-bottom: 10px;
     }
@@ -199,14 +188,12 @@
       font-weight: 600;
       color: #0f172a;
       background: #f8fafc;
-      transition: 0.2s;
       outline: none;
     }
 
     input:focus, textarea:focus {
       border-color: var(--primary);
       background: #ffffff;
-      box-shadow: 0 0 0 3px rgba(139, 67, 103, 0.12);
     }
 
     .row-2 {
@@ -215,15 +202,13 @@
       gap: 10px;
     }
 
-    /* Item List Modern Card */
+    /* Item Card */
     .item-card {
       background: #fdfbfc;
       border: 1.5px solid #efe4ea;
       border-radius: 14px;
       padding: 12px;
       margin-bottom: 10px;
-      position: relative;
-      transition: 0.2s;
     }
 
     .item-header {
@@ -269,14 +254,9 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 3px 10px rgba(139, 67, 103, 0.25);
     }
 
-    .btn-add-item:active {
-      transform: scale(0.95);
-    }
-
-    /* Accordion Pengaturan Tambahan */
+    /* Accordion Kalibrasi */
     details {
       background: #f8fafc;
       border-radius: 12px;
@@ -296,22 +276,14 @@
       align-items: center;
     }
 
-    summary::after {
-      content: "▼";
-      font-size: 10px;
-      color: #94a3b8;
-    }
+    summary::after { content: "▼"; font-size: 10px; color: #94a3b8; }
+    details[open] summary::after { content: "▲"; }
 
-    details[open] summary::after {
-      content: "▲";
-    }
-
-    /* Preview Canvas Frame */
+    /* Preview Frame */
     .preview-frame {
       background: #e2e8f0;
       padding: 10px;
       border-radius: 14px;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
     }
 
     #nota-canvas {
@@ -323,13 +295,13 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     }
 
-    /* Bottom Action Bar */
+    /* Bottom Bar */
     .bottom-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(12px);
       padding: 12px 16px;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
@@ -338,7 +310,7 @@
     }
 
     .bottom-inner {
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 1.2fr;
@@ -352,22 +324,10 @@
       font-size: 13px;
       font-weight: 800;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
       color: #fff;
-      transition: 0.2s;
     }
 
-    .btn-main:active {
-      transform: scale(0.97);
-    }
-
-    .btn-save-pdf {
-      background: #1e293b;
-    }
-
+    .btn-save-pdf { background: #1e293b; }
     .btn-share-wa {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
@@ -393,25 +353,10 @@
       border-radius: 22px;
       padding: 22px 18px;
       text-align: center;
-      animation: slideUp 0.25s ease-out;
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(40px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal-sheet h3 {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-
-    .modal-sheet p {
-      font-size: 12px;
-      color: #64748b;
-      margin-bottom: 18px;
-    }
+    .modal-sheet h3 { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+    .modal-sheet p { font-size: 12px; color: #64748b; margin-bottom: 18px; }
 
     .btn-sheet {
       width: 100%;
@@ -423,17 +368,10 @@
       margin-bottom: 10px;
       cursor: pointer;
       color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
     }
   </style>
 </head>
 <body>
-
-  <!-- QR Generator Hidden Container -->
-  <div id="qr-hidden" style="display:none;"></div>
 
   <!-- HERO HEADER -->
   <div class="hero-header">
@@ -449,7 +387,7 @@
     </div>
   </div>
 
-  <!-- FLOATING TOTAL BANNER -->
+  <!-- BANNER TOTAL -->
   <div class="summary-banner">
     <div class="summary-inner">
       <div>
@@ -461,7 +399,7 @@
   </div>
 
   <div class="main-wrap">
-    <!-- 1. INFORMASI KLIEN & FAKTUR -->
+    <!-- 1. INFORMASI TAGIHAN -->
     <div class="glass-card">
       <div class="card-head">
         <div class="card-title">👤 Tujuan & Tanggal Tagihan</div>
@@ -494,48 +432,38 @@ Sidogiri, Kraton Pasuruan</textarea>
 
       <div id="items-list"></div>
 
-      <!-- Pengaturan Rekening, QRIS & Kalibrasi -->
+      <!-- Pengaturan Kalibrasi Halus (Jika dibutuhkan) -->
       <details>
-        <summary>⚙️ Pengaturan Rekening, TTD & Kalibrasi</summary>
+        <summary>⚙️ Kalibrasi Posisi Teks (Halus)</summary>
         <div style="margin-top: 12px;">
           <div class="row-2" style="margin-bottom:8px;">
             <div>
-              <label>Nama Bank</label>
-              <input type="text" id="in-bank" value="Transfer Pembayaran Ke BCA" oninput="renderNota()">
+              <label>Y No Faktur (Default: 128)</label>
+              <input type="number" id="pos-y-faktur" value="128" oninput="renderNota()">
             </div>
             <div>
-              <label>No. Rekening</label>
-              <input type="text" id="in-norek" value="0891462009" oninput="renderNota()">
-            </div>
-          </div>
-          <div class="row-2" style="margin-bottom:8px;">
-            <div>
-              <label>Atas Nama Rekening</label>
-              <input type="text" id="in-an" value="Moch Sirojul Millah" oninput="renderNota()">
-            </div>
-            <div>
-              <label>Nama Penandatangan</label>
-              <input type="text" id="in-ttd-nama" value="Mils Hasya" oninput="renderNota()">
+              <label>Y Tanggal (Default: 215)</label>
+              <input type="number" id="pos-y-tanggal" value="215" oninput="renderNota()">
             </div>
           </div>
           <div class="row-2" style="margin-bottom:8px;">
             <div>
-              <label>Upload Gambar QRIS Asli (Opsional)</label>
-              <input type="file" id="up-qris" accept="image/*" style="font-size:11px;">
+              <label>X Tanggal (Default: 590)</label>
+              <input type="number" id="pos-x-tanggal" value="590" oninput="renderNota()">
             </div>
             <div>
-              <label>Upload TTD PNG (Opsional)</label>
-              <input type="file" id="up-ttd" accept="image/*" style="font-size:11px;">
+              <label>Y Klien (Default: 254)</label>
+              <input type="number" id="pos-y-klien" value="254" oninput="renderNota()">
             </div>
           </div>
           <div class="row-2">
             <div>
-              <label>Geser Y Awal Tabel (px)</label>
-              <input type="number" id="pos-y-tabel" value="445" oninput="renderNota()">
+              <label>Y Header Tabel (Default: 382)</label>
+              <input type="number" id="pos-y-header" value="382" oninput="renderNota()">
             </div>
             <div>
-              <label>Jarak Antar Baris (px)</label>
-              <input type="number" id="pos-gap-baris" value="48" oninput="renderNota()">
+              <label>Batas Y Bawah / QRIS (Default: 705)</label>
+              <input type="number" id="pos-y-max" value="705" oninput="renderNota()">
             </div>
           </div>
         </div>
@@ -546,7 +474,7 @@ Sidogiri, Kraton Pasuruan</textarea>
     <div class="glass-card">
       <div class="card-head">
         <div class="card-title">👁️ Live Preview Nota</div>
-        <small style="font-size:11px; color:#64748b; font-weight:600;">Otomatis Menyesuaikan Baris</small>
+        <small style="font-size:11px; color:#64748b; font-weight:600;">Auto-Fit (Anti Nabrak QRIS)</small>
       </div>
       <div class="preview-frame">
         <canvas id="nota-canvas" width="794" height="1123"></canvas>
@@ -554,7 +482,7 @@ Sidogiri, Kraton Pasuruan</textarea>
     </div>
   </div>
 
-  <!-- STICKY BOTTOM BAR -->
+  <!-- TOMBOL BAWAH -->
   <div class="bottom-bar">
     <div class="bottom-inner">
       <button type="button" class="btn-main btn-save-pdf" onclick="unduhPDF()">
@@ -566,12 +494,11 @@ Sidogiri, Kraton Pasuruan</textarea>
     </div>
   </div>
 
-  <!-- MODAL SHARE WA (PRE-GENERATED AGAR LANGSUNG BUKA APLIKASI WA) -->
+  <!-- MODAL SHARE WA -->
   <div class="modal-backdrop" id="modal-wa" onclick="if(event.target===this) tutupModalWA()">
     <div class="modal-sheet">
       <h3>Kirim Nota ke WhatsApp</h3>
-      <p id="status-siap-share">Pilih format file yang akan langsung dilampirkan ke kontak WhatsApp:</p>
-      
+      <p>Pilih format nota yang ingin dibagikan ke WhatsApp:</p>
       <button type="button" class="btn-sheet" style="background:#10b981;" onclick="kirimLangsungWA('pdf')">
         📄 Kirim Dokumen PDF
       </button>
@@ -585,17 +512,13 @@ Sidogiri, Kraton Pasuruan</textarea>
   </div>
 
 <script>
-  // URL Canvas Background Baru dari Anda
+  // URL Gambar Background Anda (Sudah termasuk QRIS, Rekening BCA, dan TTD)
   const BG_URL = "https://iili.io/npsZkrv.jpg";
 
   const canvas = document.getElementById('nota-canvas');
   const ctx = canvas.getContext('2d');
-
   let bgImg = null;
-  let qrisImg = null;
-  let customTtdImg = null;
 
-  // Variabel Pre-Generated File agar navigator.share TIDAK DIBLOKIR browser HP
   let siapFilePDF = null;
   let siapFileJPG = null;
 
@@ -616,68 +539,21 @@ Sidogiri, Kraton Pasuruan</textarea>
     renderNota();
   }
 
-  // 1. Buat QRIS Default Otomatis
-  function initQRISDefault() {
-    const wadahQR = document.getElementById('qr-hidden');
-    new QRCode(wadahQR, {
-      text: "00020101021126610014COM.GO-JEK.WWW01189360091432657946470215ID10265794647630303UMI5204599953033605802ID5917MH MEDIA - STUDIO6008PASURUAN6304",
-      width: 170,
-      height: 170
-    });
-    setTimeout(() => {
-      const qrCanvas = wadahQR.querySelector('canvas');
-      if (qrCanvas) {
-        const img = new Image();
-        img.onload = () => { if (!qrisImg) { qrisImg = img; renderNota(); } };
-        img.src = qrCanvas.toDataURL();
-      }
-    }, 250);
-  }
-
-  // Upload QRIS & TTD Custom (Tersimpan di LocalStorage)
-  document.getElementById('up-qris').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const img = new Image();
-      img.onload = () => { qrisImg = img; renderNota(); };
-      img.src = ev.target.result;
-      try { localStorage.setItem('mh_custom_qris', ev.target.result); } catch(err){}
-    };
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById('up-ttd').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const img = new Image();
-      img.onload = () => { customTtdImg = img; renderNota(); };
-      img.src = ev.target.result;
-      try { localStorage.setItem('mh_custom_ttd', ev.target.result); } catch(err){}
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // 2. Muat Background https://iili.io/npsZkrv.jpg
   function muatBackground() {
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = function() {
       bgImg = img;
-      document.getElementById('status-template').innerText = "✅ Template Siap";
+      document.getElementById('status-template').innerText = "✅ Template Aktif";
       renderNota();
     };
     img.onerror = function() {
-      document.getElementById('status-template').innerText = "⚠️ Mode Offline";
+      document.getElementById('status-template').innerText = "⚠️ Gagal Muat BG";
       renderNota();
     };
     img.src = BG_URL;
   }
 
-  // 3. Render Form Daftar Item
   function renderEditorItems() {
     const list = document.getElementById('items-list');
     list.innerHTML = '';
@@ -760,20 +636,13 @@ Sidogiri, Kraton Pasuruan</textarea>
     renderNota();
   }
 
-  // 4. RENDER NOTA DINAMIS (ANTI NABRAK MESKIPUN BARIS BANYAK)
+  // FUNGSI RENDER NOTA PRESISI (HANYA MENGGAMBAR TEKS YANG KOSONG DI TEMPLATE)
   function renderNota() {
-    const yAwalTabel = Number(document.getElementById('pos-y-tabel').value) || 445;
-    const tinggiBaris = Number(document.getElementById('pos-gap-baris').value) || 48;
-
-    // Hitung apakah tinggi kanvas perlu diperpanjang jika item > 5 baris
-    const estimasiTinggi = yAwalTabel + (items.length * tinggiBaris) + 390;
-    canvas.height = Math.max(1123, estimasiTinggi);
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Gambar Background Template
+    // 1. Gambar Background Asli (Sudah ada QRIS, BCA, TTD)
     if (bgImg) {
       ctx.drawImage(bgImg, 0, 0, 794, 1123);
     }
@@ -781,161 +650,126 @@ Sidogiri, Kraton Pasuruan</textarea>
     ctx.fillStyle = "#222222";
     ctx.textBaseline = "alphabetic";
 
-    // 1. Nomor Faktur
+    const yFaktur  = Number(document.getElementById('pos-y-faktur').value) || 128;
+    const yTanggal = Number(document.getElementById('pos-y-tanggal').value) || 215;
+    const xTanggal = Number(document.getElementById('pos-x-tanggal').value) || 590;
+    const yKlien   = Number(document.getElementById('pos-y-klien').value) || 254;
+    const yHeader  = Number(document.getElementById('pos-y-header').value) || 382;
+    const yMax     = Number(document.getElementById('pos-y-max').value) || 705;
+
+    // 2. Teks Nomor Faktur (Di bawah tulisan NO FAKTUR)
     const noFaktur = document.getElementById('in-faktur').value;
     ctx.font = "500 17px 'Montserrat', sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("#" + noFaktur, 650, 138);
+    ctx.fillText("#" + noFaktur, 648, yFaktur);
 
-    // 2. Tanggal (Otomatis menambahkan label Tanggal : jika di template bersih)
+    // 3. Teks Tanggal (Sejajar tepat di sebelah kanan tulisan "Tanggal :")
     const tanggal = document.getElementById('in-tanggal').value;
-    ctx.textAlign = "right";
-    ctx.font = "400 16px 'Montserrat', sans-serif";
-    ctx.fillText(tanggal, 712, 215);
+    ctx.font = "400 15.5px 'Montserrat', sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText(tanggal, xTanggal, yTanggal);
 
-    // 3. Tagihan Untuk (Klien)
+    // 4. Teks Tagihan Untuk (Di bawah tulisan "Tagihan Untuk:")
     const klienLines = document.getElementById('in-klien').value.split('\n');
-    ctx.font = "400 17px 'Montserrat', sans-serif";
+    ctx.font = "400 16.5px 'Montserrat', sans-serif";
     ctx.textAlign = "left";
     klienLines.forEach((line, idx) => {
-      ctx.fillText(line, 83, 255 + (idx * 24));
+      ctx.fillText(line, 83, yKlien + (idx * 24));
     });
 
-    // 4. Baris Tabel
-    let yCursor = yAwalTabel;
+    // 5. Gambar Header Tabel (KETERANGAN, HARGA, JUMLAH, TOTAL) + Garis Bawah Header
+    ctx.font = "600 16.5px 'Montserrat', sans-serif";
+    ctx.fillStyle = "#222222";
+
+    ctx.textAlign = "left";
+    ctx.fillText("KETERANGAN", 80, yHeader);
+
+    ctx.textAlign = "center";
+    ctx.fillText("HARGA", 435, yHeader);
+    ctx.fillText("JUMLAH", 545, yHeader);
+
+    ctx.textAlign = "right";
+    ctx.fillText("TOTAL", 714, yHeader);
+
+    const yGarisHeader = yHeader + 15;
+    ctx.beginPath();
+    ctx.strokeStyle = "#333333";
+    ctx.lineWidth = 1.4;
+    ctx.moveTo(80, yGarisHeader);
+    ctx.lineTo(714, yGarisHeader);
+    ctx.stroke();
+
+    // 6. Sistem Smart Auto-Scale Baris Tabel (Supaya Tidak Pernah Nabrak QRIS di Y=735)
+    const jumlahBaris = Math.max(1, items.length);
+    const ruangTersedia = (yMax - 42) - yGarisHeader; // Sisakan 42px untuk baris TOTAL di bawah tabel
+    const tinggiBaris = Math.min(48, Math.floor(ruangTersedia / jumlahBaris));
+    const ukuranFontItem = tinggiBaris < 34 ? 13.5 : (tinggiBaris < 40 ? 14.5 : 16);
+    const offsetGaris = Math.floor(tinggiBaris * 0.34);
+
+    let yCursor = yGarisHeader + tinggiBaris - offsetGaris;
     let grandTotal = 0;
 
-    items.forEach(item => {
+    items.forEach((item) => {
       const isZero = item.qty <= 0 || item.harga <= 0;
       const sub = isZero ? 0 : (item.harga * item.qty);
       grandTotal += sub;
 
-      ctx.font = "400 16px 'Montserrat', sans-serif";
+      ctx.font = `400 ${ukuranFontItem}px 'Montserrat', sans-serif`;
       ctx.fillStyle = "#222222";
 
+      // Keterangan
       ctx.textAlign = "left";
       ctx.fillText(item.ket, 80, yCursor);
 
+      // Harga
       ctx.textAlign = "center";
       ctx.fillText(formatRp(item.harga), 435, yCursor);
+
+      // Jumlah
       ctx.fillText(item.qty > 0 ? String(item.qty) : "-", 545, yCursor);
 
+      // Total per baris
       ctx.textAlign = "right";
       ctx.fillText(formatRp(sub), 714, yCursor);
 
-      // Garis Bawah Tiap Baris
+      // Garis Bawah Baris
+      const yGarisBaris = yCursor + offsetGaris;
       ctx.beginPath();
       ctx.strokeStyle = "#666666";
       ctx.lineWidth = 1;
-      ctx.moveTo(80, yCursor + 16);
-      ctx.lineTo(714, yCursor + 16);
+      ctx.moveTo(80, yGarisBaris);
+      ctx.lineTo(714, yGarisBaris);
       ctx.stroke();
 
       yCursor += tinggiBaris;
     });
 
-    // Update Banner Total di Atas Aplikasi
+    // Update Banner Total di Aplikasi
     document.getElementById('banner-total').innerText = formatRp(grandTotal);
 
-    // 5. GRAND TOTAL (Otomatis di bawah baris terakhir)
-    const yTotal = yCursor + 14;
+    // 7. Gambar GRAND TOTAL (Tepat di bawah garis baris terakhir, aman di atas kotak BCA)
+    const yGarisTerakhir = yCursor - tinggiBaris + offsetGaris;
+    const yGrandTotal = yGarisTerakhir + 34;
+
     ctx.font = "700 20px 'Montserrat', sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("TOTAL", 390, yTotal);
-
-    ctx.textAlign = "right";
-    ctx.fillText(formatRp(grandTotal), 714, yTotal);
-
-    // 6. FOOTER DINAMIS (QRIS, Rekening BCA, & Tanda Tangan otomatis turun mengikuti tabel)
-    const yFooter = yTotal + 42;
-
-    // A. Blok QRIS di Kiri
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#111111";
-    ctx.font = "700 13px 'Montserrat', sans-serif";
-    ctx.fillText("MH MEDIA - STUDIO", 190, yFooter);
-
-    ctx.font = "400 11px 'Montserrat', sans-serif";
-    ctx.fillText("NMID : ID1026579464763", 190, yFooter + 16);
-    ctx.fillText("A01", 190, yFooter + 31);
-
-    if (qrisImg) {
-      ctx.drawImage(qrisImg, 105, yFooter + 40, 170, 170);
-    }
-
-    // Logo Teks QRIS Standar di bawah barcode
-    ctx.font = "800 16px 'Montserrat', sans-serif";
-    ctx.fillText("QRIS", 145, yFooter + 230);
-    ctx.font = "600 8px 'Montserrat', sans-serif";
-    ctx.textAlign = "left";
-    ctx.fillText("QR Code Standar", 175, yFooter + 221);
-    ctx.fillText("Pembayaran Nasional", 175, yFooter + 231);
-
-    // B. Kotak Rekening BCA di Kanan Atas Footer
-    const boxX = 390;
-    const boxY = yFooter + 8;
-    const boxW = 324;
-    const boxH = 96;
-
-    ctx.strokeStyle = "#777777";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(boxX, boxY, boxW, boxH);
-
     ctx.fillStyle = "#222222";
     ctx.textAlign = "left";
-    ctx.font = "700 16px 'Montserrat', sans-serif";
-    ctx.fillText(document.getElementById('in-bank').value, boxX + 16, boxY + 28);
+    ctx.fillText("TOTAL", 390, yGrandTotal);
 
-    ctx.font = "400 15px 'Montserrat', sans-serif";
-    ctx.fillText("Atas Nama", boxX + 16, boxY + 55);
-    ctx.fillText(":  " + document.getElementById('in-an').value, boxX + 115, boxY + 55);
-
-    ctx.fillText("No Rekening", boxX + 16, boxY + 79);
-    ctx.fillText(":  " + document.getElementById('in-norek').value, boxX + 115, boxY + 79);
-
-    // C. Blok Tanda Tangan di Kanan Bawah Footer
-    const signCenterX = 615;
-    const signTopY = boxY + 145;
-
-    ctx.textAlign = "center";
-    ctx.font = "400 15px 'Montserrat', sans-serif";
-    ctx.fillText("Dengan Hormat,", signCenterX, signTopY);
-
-    if (customTtdImg) {
-      ctx.drawImage(customTtdImg, signCenterX - 75, signTopY + 8, 150, 65);
-    } else {
-      // Gambar Tanda Tangan Default Mils Hasya
-      ctx.save();
-      ctx.translate(signCenterX - 85, signTopY + 5);
-      ctx.beginPath();
-      ctx.strokeStyle = "#111111";
-      ctx.lineWidth = 2;
-      ctx.lineCap = "round";
-      ctx.moveTo(15, 25);
-      ctx.bezierCurveTo(60, 15, 110, 25, 115, 35);
-      ctx.bezierCurveTo(120, 45, 45, 75, 35, 60);
-      ctx.bezierCurveTo(25, 45, 95, 25, 130, 20);
-      ctx.bezierCurveTo(140, 18, 135, 45, 145, 30);
-      ctx.bezierCurveTo(155, 15, 175, 28, 165, 35);
-      ctx.bezierCurveTo(155, 42, 105, 52, 85, 55);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    ctx.font = "700 16.5px 'Montserrat', sans-serif";
-    ctx.fillText(document.getElementById('in-ttd-nama').value, signCenterX, signTopY + 88);
+    ctx.textAlign = "right";
+    ctx.fillText(formatRp(grandTotal), 714, yGrandTotal);
   }
 
-  // 5. EXPORT PDF & PRE-GENERATE SHARE WA (SUPAYA LANGSUNG BUKA WA TANPA DOWNLOAD)
+  // EXPORT PDF & SHARE WHATSAPP
   function buatPDFInstance() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'px',
-      format: [canvas.width, canvas.height]
+      format: [794, 1123]
     });
-    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-    pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+    const imgData = canvas.toDataURL('image/jpeg', 0.96);
+    pdf.addImage(imgData, 'JPEG', 0, 0, 794, 1123);
     return pdf;
   }
 
@@ -945,17 +779,14 @@ Sidogiri, Kraton Pasuruan</textarea>
     buatPDFInstance().save(`Invoice_MH_MEDIA_${noFaktur}.pdf`);
   }
 
-  // Siapkan File PDF & JPG SEBELUM Modal Diklik (Menjaga User Gesture Android)
   function siapkanDanBukaModalWA() {
     renderNota();
     const noFaktur = document.getElementById('in-faktur').value;
 
-    // 1. Siapkan File PDF di Memori
     const pdfBlob = buatPDFInstance().output('blob');
     siapFilePDF = new File([pdfBlob], `Invoice_MH_MEDIA_${noFaktur}.pdf`, { type: 'application/pdf' });
 
-    // 2. Siapkan File JPG secara Sinkron dari DataURL
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.96);
     const byteString = atob(dataUrl.split(',')[1]);
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
@@ -981,45 +812,26 @@ Sidogiri, Kraton Pasuruan</textarea>
     return `Halo *${klien}*,\nBerikut kami lampirkan Invoice *MH MEDIA*:\n\n📄 *No. Faktur:* #${noFaktur}\n📅 *Tanggal:* ${tanggal}\n💰 *Total Tagihan:* ${total}\n\nTerima kasih! 🙏`;
   }
 
-  // Dipanggil langsung saat tombol di modal ditekan (0 milidetik delay = Langsung buka Share Sheet WA)
   function kirimLangsungWA(format) {
     tutupModalWA();
     const filePilihan = format === 'pdf' ? siapFilePDF : siapFileJPG;
     const caption = buatTeksCaptionWA();
 
-    // Jika dibuka di Chrome Android (HTTPS GitHub Pages), langsung muncul menu pilih aplikasi WhatsApp
+    // Di HP Android (Chrome), langsung membuka Share Sheet untuk memilih aplikasi WhatsApp
     if (navigator.canShare && navigator.canShare({ files: [filePilihan] })) {
       navigator.share({
         files: [filePilihan],
         title: filePilihan.name,
         text: caption
-      }).catch(err => {
-        console.log("Share dibatalkan:", err);
-      });
+      }).catch(err => console.log("Batal share:", err));
     } else {
-      // Jika dibuka di APK WebView standar yang tidak mendukung Share File, langsung buka aplikasi WA
+      // Di Laptop/MacBook (Firefox desktop tidak mendukung share file langsung ke aplikasi WA),
+      // otomatis membuka aplikasi WhatsApp Desktop/Web dengan teks tagihan
       window.location.href = `whatsapp://send?text=${encodeURIComponent(caption)}`;
     }
   }
 
-  // Inisialisasi Saat Aplikasi Dibuka
   renderEditorItems();
-  initQRISDefault();
-
-  // Cek apakah ada QRIS / TTD tersimpan
-  const savedQris = localStorage.getItem('mh_custom_qris');
-  if (savedQris) {
-    const imgQ = new Image();
-    imgQ.onload = () => { qrisImg = imgQ; renderNota(); };
-    imgQ.src = savedQris;
-  }
-  const savedTtd = localStorage.getItem('mh_custom_ttd');
-  if (savedTtd) {
-    const imgT = new Image();
-    imgT.onload = () => { customTtdImg = imgT; renderNota(); };
-    imgT.src = savedTtd;
-  }
-
   muatBackground();
 </script>
 
