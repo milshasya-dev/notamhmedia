@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MH MEDIA - Smart Invoice</title>
+  <title>MH MEDIA Invoice</title>
   <meta name="theme-color" content="#2b1d28">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -392,7 +392,7 @@
     <div class="summary-inner">
       <div>
         <div class="summary-label">Total Tagihan Aktif</div>
-        <div class="summary-value" id="banner-total">Rp 3.800.000</div>
+        <div class="summary-value" id="banner-total">Rp 0</div>
       </div>
       <span id="status-template" class="pill-status">⏳ Memuat...</span>
     </div>
@@ -407,8 +407,8 @@
 
       <div class="form-group">
         <label>Tagihan Untuk (Nama Klien & Alamat)</label>
-        <textarea id="in-klien" rows="2" oninput="renderNota()">Metode Al Miftah Sidogiri
-Sidogiri, Kraton Pasuruan</textarea>
+        <textarea id="in-klien" rows="2" oninput="renderNota()">Nama Pelanggan
+Alamat Pelanggan</textarea>
       </div>
 
       <div class="row-2">
@@ -523,7 +523,7 @@ Sidogiri, Kraton Pasuruan</textarea>
   let siapFileJPG = null;
 
   let items = [
-    { ket: "Record + Arransemen", harga: 200000, qty: 19 },
+    { ket: "Record + Arransemen", harga: 0, qty: 0 },
     { ket: "Editing", harga: 0, qty: 0 },
     { ket: "Mixing - Mastering", harga: 0, qty: 0 },
     { ket: "Sewa Studio Take Vocal", harga: 0, qty: 0 },
